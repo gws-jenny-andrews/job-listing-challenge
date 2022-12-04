@@ -1,5 +1,5 @@
 import React from "react";
-
+import "../styles/joblisting.scss";
 const FilterBox = ({ filters, removeFilter, clearFilters }) => {
   return (
     <div className={`filterBox ${filters.length > 0 ? "open" : ""}`}>
@@ -18,7 +18,7 @@ const FilterBox = ({ filters, removeFilter, clearFilters }) => {
           ))}
       </div>
       <div className="filterClear" onClick={clearFilters}>
-        <a href="/"></a>Clear
+        <a href="/">Clear</a>
       </div>
     </div>
   );

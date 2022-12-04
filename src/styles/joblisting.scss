@@ -67,11 +67,32 @@
     .filterClear {
       flex-shrink: 0;
 
-      &::is(:hover, :focus) {
+      a {
+        color: var(--neutral-800);
+        text-decoration: none;
+
+        &:is(:hover, :focus) {
+          text-decoration: underline;
+          color: var(--primary-500);
+        }
+      }
+      
+    }
+  }
+
+  .filterClear {
+    flex-shrink: 0;
+
+    a {
+      color: var(--neutral-800);
+      text-decoration: none;
+
+      &:is(:hover, :focus) {
         text-decoration: underline;
         color: var(--primary-500);
       }
     }
+    
   }
 }
 
