@@ -8,7 +8,7 @@ const Header = () => {
             media="(min-width:969px)"
             srcSet="/images/bg-header-desktop.svg"
           />
-          <img src="images/bg-header-mobile.svg" />
+          <img src="images/bg-header-mobile.svg" alt="background header default" />
         </picture>
       </header>
   )

@@ -12,7 +12,7 @@ const FilterBox = ({ filters, removeFilter, clearFilters }) => {
                 className="filterClose"
                 onClick={() => removeFilter(filter)}
               >
-                <img src="images/icon-remove.svg" />
+                <img src="images/icon-remove.svg" alt="remove filter icon"/>
               </button>
             </div>
           ))}

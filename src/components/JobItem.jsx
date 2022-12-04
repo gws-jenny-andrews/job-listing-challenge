@@ -7,7 +7,7 @@ const JobItem = ({job, addFilter}) => {
               key={job.id}
             >
               <div className="logo">
-                <img src={`/images/${job.logo}`} />
+                <img src={`/images/${job.logo}`} alt="company logo" />
               </div>
               <div className="job__info">
                 <div className="job__infoHeader">
