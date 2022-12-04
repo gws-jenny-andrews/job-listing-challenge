@@ -1,23 +1,51 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import data from "../src/data/data.json";
 
 function App() {
-  const [jobData, setJobData] = useState(data);
+  const [jobData, setJobData] = useState(data); // this is the stateof truth
+
+  // this requires almost n x 2 in memory, but it is easy. An 
+  // alternative would be to add a "active" key to each job.
+  const [filteredJobData, setFilteredJobData] = useState([].concat(data));
   const [filters, setFilters] = useState([]);
 
-  const addFilter = (filter) => {
+  useEffect(() => {
+    if (filters.length === 0) {
+      setFilteredJobData(jobData)
+      return
+    }
+    let tempJobData = []
+    let tempFilters = filters.map(x => x.name)
+
+    jobData.forEach(job => {
+      let tags = [job.role, job.level, ...job.languages, ...job.tools]
+      if (tempFilters.every(elem => tags.includes(elem))) {
+        tempJobData.push(job)
+      }
+    })
+    
+    setFilteredJobData(tempJobData)
+    
+    return () => {
+      setFilteredJobData(jobData)
+    }
+  }, [filters])
+  
+
+
+  const addFilter = (filter, type) => {
     let tempFilters = [...filters]
-    const idx = tempFilters.findIndex((x) => x === filter)
-    console.log("role", filter)
-    console.log("Index", idx)
-    if (idx < 0) tempFilters.push(filter)
+    const idx = tempFilters.findIndex((x) => x.name === filter)
+    if (idx < 0) tempFilters.push({
+      name: filter,
+      type
+    })
     
     setFilters(tempFilters)
   }
 
   const removeFilter = (filter) => {
-    
-    let tempFilters = filters.filter((x) => x !== filter)
+    let tempFilters = filters.filter((x) => x.name !== filter.name)
     setFilters(tempFilters)
   }
 
@@ -45,7 +73,7 @@ function App() {
             {filters?.length > 0 &&
               filters.map((filter, index) => (
                 <div className="filterWrapper" key={index}>
-                  <div className="filter">{filter}</div>
+                  <div className="filter">{filter.name}</div>
                   <button className="filterClose" onClick={() => removeFilter(filter)} >
                     <img src="images/icon-remove.svg" />
                   </button>
@@ -56,8 +84,8 @@ function App() {
         </div>
 
         <div className="jobList">
-          {jobData &&
-            jobData.map((job, index) => (
+          {filteredJobData &&
+            filteredJobData.map((job, index) => (
               <div className={`job ${job?.featured ? "featured" : ""}`} key={job.id}>
                 <div className="logo">
                   <img src={`/images/${job.logo}`} />
@@ -86,18 +114,18 @@ function App() {
                   </div>
                 </div>
                 <div className="tags">
-                  <button className="tag" onClick={() => {addFilter(job.role)}}>{job.role}</button>
-                  <button className="tag" onClick={() => {addFilter(job.level)}}>{job.level}</button>
+                  <button className="tag" onClick={() => {addFilter(job.role, "role")}}>{job.role}</button>
+                  <button className="tag" onClick={() => {addFilter(job.level, "level")}}>{job.level}</button>
                   {job.languages &&
                     job.languages.map((language, languageIndex) => (
-                      <button  className="tag" key={languageIndex} onClick={() => {addFilter(language)}}>
+                      <button  className="tag" key={languageIndex} onClick={() => {addFilter(language, "language")}}>
                         {language}
                       </button>
                     ))}
 
                   {job.tools &&
                     job.tools.map((tool, toolIndex) => (
-                      <div className="tag" key={toolIndex} onClick={() => {addFilter(tool)}}>
+                      <div className="tag" key={toolIndex} onClick={() => {addFilter(tool, "tool")}}>
                         <a>{tool}</a>
                       </div>
                     ))}
